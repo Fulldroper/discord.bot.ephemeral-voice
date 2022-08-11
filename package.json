@@ -15,7 +15,8 @@
       "events": "./events/",
       "command": "./command/",
       "db": "./db/"
-    }
+    },
+    "voicecouldown": 10000
   },
   "keywords": [],
   "author": "",

@@ -4,7 +4,7 @@ require("./lib/moded_prototypes")()
 const config = require("./package.json").config
 const { readdirSync } = require('fs')
 const axios = require("axios").default
-const {Client, Intents} = require('discord.js');
+const {Client, Intents, BitField, PermissionsBitField } = require('discord.js');
 
 const bot = new Client({
   intents: [
@@ -16,14 +16,14 @@ const bot = new Client({
 });
 // storage for commands module
 bot.cmds = {}
+bot.config = config
+bot.BitField = BitField
+bot.PermissionsBitField  = PermissionsBitField 
 bot.catch_err = require("./lib/errorCallback")({
   webhook_url: process.env.ERROR_WEBHOOK_URL,
   username: process.env.CLIENT_ID,
 })
-bot.dbs = {
-  guilds : channels = require('redis').createClient({url:process.env.REDIS_URL})
-} 
-
+bot.db = require('redis').createClient({url:process.env.REDIS_URL})
 
 // register commands
 readdirSync(config.path.command).forEach(file => {
@@ -45,7 +45,7 @@ const reg = async () => {
   
   let res = {}
   exit.data.forEach(el => res[el.name] = el.id)
-
+  
   for (const key in bot.cmds) {
     await axios({
       method: 'post',
